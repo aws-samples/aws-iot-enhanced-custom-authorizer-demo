@@ -1,0 +1,28 @@
+{
+  "token": "allow",
+  "signatureVerified": false,
+  "protocols": [
+    "tls",
+    "http",
+    "mqtt"
+  ],
+  "protocolData": {
+    "tls": {
+      "serverName": "serverName"
+    },
+    "http": {
+      "headers": {
+        "header1": "lorem-ipsum"
+      },
+      "queryString": "?token=allow"
+    },
+    "mqtt": {
+      "username": "myUserName",
+      "password": "myPassword",
+      "clientId": "myClientId"
+    }
+  },
+  "connectionMetadata": {
+    "id": 1234567890
+  }
+}
