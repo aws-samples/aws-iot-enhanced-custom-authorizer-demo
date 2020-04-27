@@ -1,68 +1,82 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# AWS Amplify SPA Demo
 
-## Available Scripts
+This is a rudimentary sample application built using AWS Amplify which subscribes to MQTT topics using AWS IoT Core Enhanced Custom Authorizers
 
-In the project directory, you can run:
+## Setup
 
-### `yarn start`
+To get started with this Amplify demo, run the following commands from within the web directory. This also assumes that you have completed all of the necessary steps to configure your Enhanced Custom Authorizer with AWS IoT Core.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+amplify configure # optional if you already have amplify configured with an AWS access key pair
+amplify init # options selected in screenshot below
+amplify run
+```
 
-### `yarn test`
+![Amplify Init Options](amplify-init-options.png "Amplify Init Options")
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+## Configuring the app to subscribe to AWS IoT Core
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Using the FQDN from your configurable AWS IoT endpoint, you can now build applications using Amplify's PubSub support by passing Tokens through as query string parameters.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+This allows you to use any IdP, assuming you correctly validate your tokens within the Custom Authorizer and generate sensible IoT policies with least privileged access (instead of the allow all policy the example in this codebase currently generates!).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The following is example Amplify component built in React, which also exists under [App.js](./src/App.js):
 
-### `yarn eject`
+```javascript
+import React from 'react';
+import Amplify, { PubSub } from 'aws-amplify';
+import { MqttOverWSProvider } from "@aws-amplify/pubsub/lib/Providers";
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+// TODO - you will replace this with your own ATS-specific custom domain endpoint for AWS IoT Core
+const mqtt_host = 'xxxxxxxxxxxxxxxxxxxx-ats.iot.us-east-1.amazonaws.com'
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Amplify.addPluggable(new MqttOverWSProvider({
+  //here you would include your token as the query string parameter use to initialize the connection
+  aws_pubsub_endpoint: `wss://${mqtt_host}/mqtt?token=allow`,
+}));
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+function MessageList(props){
+  const messages = props.messages
+  const listItems = messages.map((data, i) =>
+    <li key={i}>{data.client_received_at.toString()} - {data.message}</li>
+  )
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  return(
+    <ul>{listItems}</ul>
+  )
+}
 
-## Learn More
+export default class App extends React.Component {
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  constructor(props){
+    super(props)
+    this.state = {messages:[]}
+  }
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  componentDidMount(){
+    PubSub.subscribe('#').subscribe({
+        next: data => {
+          data.value.client_received_at = new Date()
+          console.log(`Message received: ${JSON.stringify(data.value)}`)
+          this.setState(prevState => ({
+            messages: [...prevState.messages, data.value]
+          }))
+        },
+        error: error => console.error(error),
+        close: () => console.log('Done'),
+    })
+  }
 
-### Code Splitting
+  render(){
+    const messages = this.state.messages
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+    return (
+      <div className="App">
+        <MessageList messages={messages} />
+      </div>
+    )
+  }
+}
+```

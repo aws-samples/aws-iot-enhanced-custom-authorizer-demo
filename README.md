@@ -1,10 +1,17 @@
-## AWS IoT Enhanced Custom Authorizer Demo Applications
+# AWS IoT Enhanced Custom Authorizer Demo
 
 This example demonstrates the necessary steps to use Enhanced Custom Authentication and Configurable Endpoints with AWS IoT Core. At the time of writing, these features are available as public Beta only in the us-east-1 / N. Virginia region of AWS.
 
 One major disclaimer at this time: This demo was built taking the path of least resistance; a production quality implementation is pending using a more suitable approach to token validation in the Custom Authorizer AWS Lambda function, and using token signing.
 
-Another major goal in building this demo was to illustrate the use of AWS Amplify to build browser based web applications to integrate with AWS IoT Core using new enhanced custom authorizers. Example code can be found under the [web](./web) directory of this repository.
+Another goal in building this demo was to illustrate the use of AWS Amplify to build browser based web applications to integrate with AWS IoT Core using new enhanced custom authorizers. Example code can be found under the [web](./web) directory of this repository.
+
+## Prerequisites
+
+* An AWS Account
+* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
+* [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+* [Amplify CLI](https://aws-amplify.github.io/docs/cli-toolchain/quickstart#installation)
 
 ## Deploy the Enhanced Custom Authorizer Lambda function
 
@@ -105,69 +112,7 @@ aws iot update-domain-configuration \
   --authorizer-config '{"allowAuthorizerOverride": true,"defaultAuthorizerName": "CustomAuthorizer2"}'
 ```
 
-## Build awesome web applications with AWS Amplify
 
-Using the FQDN from your configurable AWS IoT endpoint, you can now build applications using Amplify's PubSub support by passing Tokens through as query string parameters.
-
-This allows you to use any IdP, assuming you correctly validate your tokens within the Custom Authorizer and generate sensible IoT policies with least privileged access (instead of the allow all policy the example in this codebase currently generates!).
-
-The following is example Amplify component built in React:
-
-```javascript
-import React from 'react';
-import Amplify, { PubSub } from 'aws-amplify';
-import { MqttOverWSProvider } from "@aws-amplify/pubsub/lib/Providers";
-
-const mqtt_host = 'xxxxxxxxxxxxxxxxxxxx-ats.iot.us-east-1.amazonaws.com'
-
-Amplify.addPluggable(new MqttOverWSProvider({
-  //here you would include your token as the query string parameter use to initialize the connection
-  aws_pubsub_endpoint: `wss://${mqtt_host}/mqtt?token=allow`,
-}));
-
-function MessageList(props){
-  const messages = props.messages
-  const listItems = messages.map((data, i) =>
-    <li key={i}>{data.client_received_at.toString()} - {data.message}</li>
-  )
-
-  return(
-    <ul>{listItems}</ul>
-  )
-}
-
-export default class App extends React.Component {
-
-  constructor(props){
-    super(props)
-    this.state = {messages:[]}
-  }
-
-  componentDidMount(){
-    PubSub.subscribe('#').subscribe({
-        next: data => {
-          data.value.client_received_at = new Date()
-          console.log(`Message received: ${JSON.stringify(data.value)}`)
-          this.setState(prevState => ({
-            messages: [...prevState.messages, data.value]
-          }))
-        },
-        error: error => console.error(error),
-        close: () => console.log('Done'),
-    })
-  }
-
-  render(){
-    const messages = this.state.messages
-
-    return (
-      <div className="App">
-        <MessageList messages={messages} />
-      </div>
-    )
-  }
-}
-```
 
 ## Resources
 
