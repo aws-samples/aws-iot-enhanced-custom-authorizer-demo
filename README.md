@@ -74,7 +74,7 @@ Now you should test your custom authorizer using the aws cli:
 
 ```bash
 aws iot test-invoke-authorizer \
-  --authorizer-name CustomAuthorizer2 \
+  --authorizer-name CustomAuthorizer \
   --http-context '{"headers":{}, "queryString": "?token=allow"}'
 ```
 
@@ -111,7 +111,7 @@ The output of the `describe-domain-configuration` command above contains the Ful
 ```bash
 aws iot update-domain-configuration \
   --domain-configuration-name "customAuthorizerDomainConfiguration" \
-  --authorizer-config '{"allowAuthorizerOverride": true,"defaultAuthorizerName": "CustomAuthorizer2"}'
+  --authorizer-config '{"allowAuthorizerOverride": true,"defaultAuthorizerName": "CustomAuthorizer"}'
 ```
 
 
