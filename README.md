@@ -13,13 +13,6 @@ Another goal in building this demo was to illustrate the use of AWS Amplify to b
 * [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 * [Amplify CLI](https://aws-amplify.github.io/docs/cli-toolchain/quickstart#installation)
 
-## Demos
-
-* Username / password based authentication
-* JWT based authorization
-* Query string authentication
-
-
 ## Deploy the Enhanced Custom Authorizer Lambda function
 
 The SAM CLI requires an S3 Bucket for uploading the Enhanced Custom Authorizer Lambda function artifacts. Creation of the S3 bucket is assumed prior to executing the following commands:
@@ -136,9 +129,11 @@ aws iot update-domain-configuration \
 
 ## TODO
 
-* Custom authorizer using signing enabled
-* use a real token example to authorize users based on token content
 * Generate restrictive policies based on principal and grants in tokens
+* Demo: Username / password based authentication example
+* Demo: JWT based authorization example
+* Demo: Query string authentication example using token signing
+* Demo: vanilla javascript example
 
 ## License
 

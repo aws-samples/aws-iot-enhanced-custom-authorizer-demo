@@ -61,8 +61,9 @@ export default class App extends React.Component {
           }))
         },
         error: error => {
+          console.log(JSON.stringify(error, null, 2))
           this.setState(prevState => ({
-            connectionState: `Error: ${error}`
+            connectionState: `Failed to subscribe to topic '${mqtt_topic}' on endpoint ${mqtt_host}: ${error.error.errorMessage}`
           }))
         },
         close: () => {
