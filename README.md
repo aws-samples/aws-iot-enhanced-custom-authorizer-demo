@@ -13,6 +13,13 @@ Another goal in building this demo was to illustrate the use of AWS Amplify to b
 * [SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 * [Amplify CLI](https://aws-amplify.github.io/docs/cli-toolchain/quickstart#installation)
 
+## Demos
+
+* Username / password based authentication
+* JWT based authorization
+* Query string authentication
+
+
 ## Deploy the Enhanced Custom Authorizer Lambda function
 
 The SAM CLI requires an S3 Bucket for uploading the Enhanced Custom Authorizer Lambda function artifacts. Creation of the S3 bucket is assumed prior to executing the following commands:
@@ -59,7 +66,7 @@ The output of the above command, if successful, will contain the ARN for your cu
 ```
 
 
-1. Next, you need to grant the AWS IoT Core service principal access to invoke your custom authorizer Lambda function:
+2. Next, you need to grant the AWS IoT Core service principal access to invoke your custom authorizer Lambda function:
 
 ```bash
 aws lambda add-permission \
@@ -78,7 +85,7 @@ aws iot test-invoke-authorizer \
   --http-context '{"headers":{}, "queryString": "?token=allow"}'
 ```
 
-1. Enhanced custom authorizers must be registered as part of configurable endpoints for AWS IoT Core. In this example, we will create a custom endpoint for an AWS-managed domain.
+3. Enhanced custom authorizers must be registered as part of configurable endpoints for AWS IoT Core. In this example, we will create a custom endpoint for an AWS-managed domain.
 
 ```bash
 aws iot create-domain-configuration \
@@ -106,7 +113,7 @@ The output of the `describe-domain-configuration` command above contains the Ful
 }
 ```
 
-1. Finally, you need to update your domain configuration to use your custom authorizer:
+4. Finally, you need to update your domain configuration to use your custom authorizer:
 
 ```bash
 aws iot update-domain-configuration \
