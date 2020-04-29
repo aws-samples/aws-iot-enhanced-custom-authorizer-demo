@@ -2,3 +2,5 @@ lambda/packaged.yml
 generate-archive.sh
 .DS_Store
 web/amplify
+*.pem
+token*
