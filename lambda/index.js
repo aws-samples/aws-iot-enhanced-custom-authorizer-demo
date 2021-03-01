@@ -72,7 +72,7 @@ var generateAuthResponse = function(token, effect) {
     policyDocument.Statement[0] = statement;
     authResponse.policyDocuments = [policyDocument];
     authResponse.disconnectAfterInSeconds = 3600;
-    authResponse.refreshAfterInSeconds = 600;
+    authResponse.refreshAfterInSeconds = 300;
 
     return authResponse;
 }
