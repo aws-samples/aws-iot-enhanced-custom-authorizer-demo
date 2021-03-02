@@ -1,20 +1,38 @@
 # AWS Amplify SPA Demo
 
-This is a rudimentary sample application built using AWS Amplify which subscribes to MQTT topics using AWS IoT Core Enhanced Custom Authorizers
+This is a rudimentary sample application built using AWS Amplify which subscribes to MQTT topics using AWS IoT Core Enhanced Custom Authorizers.
 
 ## Setup
 
-To get started with this Amplify demo, run the following commands from within the web directory. This also assumes that you have completed all of the necessary steps to configure your Enhanced Custom Authorizer with AWS IoT Core.
+You have two options to run this demo:
+- without an AWS Amplify backend
+- with an AWS Amplify backend 
+
+This also assumes that you have completed all of the necessary steps to configure your Enhanced Custom Authorizer with AWS IoT Core.
+
+### Option 1 - no AWS Amplify backend
+If you want to only test the connection to AWS IoT Core without deploying an Amplify backend, you can run:
 
 ```bash
-npm install 
+yarn install 
+yarn run start
+```
+
+> NOTE: AWS Amplify libraries requires an `aws-exports.js` file to be present. For this option to work we are providing the file with dummy values.
+
+### Option 2 - with AWS Amplify backend
+If you plan to add other AWS Amplify functionalities to this sample app, you should first initialize the backend. You can do this by running:
+
+```bash
+yarn install
 amplify configure # optional if you already have amplify configured with an AWS access key pair
 amplify init # example of options to select in screenshot below
-amplify run
+yarn run start
 ```
 
 ![Amplify Init Options](amplify-init-options.png "Amplify Init Options")
 
+> NOTE: If you run this option, a new `aws-exports.js` file will be generated.
 
 ## Configuring the app to subscribe to AWS IoT Core
 
