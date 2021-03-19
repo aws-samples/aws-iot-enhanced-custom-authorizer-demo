@@ -6,6 +6,10 @@ One major disclaimer at this time: This demo was built taking the path of least 
 
 Another goal in building this demo was to illustrate the use of AWS Amplify to build browser based web applications to integrate with AWS IoT Core using new enhanced custom authorizers. Example code can be found under the [web](./web) directory of this repository.
 
+## MQTT/TLS username/password auth
+
+If you want to test the Custom Authorizer for MQTT/TLS connections using username and password authentication, please checkout the [mqtt-username-password](https://github.com/aws-samples/aws-iot-enhanced-custom-authorizer-demo/tree/mqtt-username-password) branch
+
 ## Prerequisites
 
 * An AWS Account
