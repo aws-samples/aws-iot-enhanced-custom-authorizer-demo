@@ -6,7 +6,7 @@ This is a rudimentary sample application built using AWS Amplify which subscribe
 
 You have two options to run this demo:
 - without an AWS Amplify backend
-- with an AWS Amplify backend 
+- with an AWS Amplify backend
 
 This also assumes that you have completed all of the necessary steps to configure your Enhanced Custom Authorizer with AWS IoT Core.
 
@@ -14,8 +14,8 @@ This also assumes that you have completed all of the necessary steps to configur
 If you want to only test the connection to AWS IoT Core without deploying an Amplify backend, you can run:
 
 ```bash
-yarn install 
-yarn run start
+npm install
+npm start
 ```
 
 > NOTE: AWS Amplify libraries requires an `aws-exports.js` file to be present. For this option to work we are providing the file with dummy values.
@@ -24,10 +24,10 @@ yarn run start
 If you plan to add other AWS Amplify functionalities to this sample app, you should first initialize the backend. You can do this by running:
 
 ```bash
-yarn install
+npm install
 amplify configure # optional if you already have amplify configured with an AWS access key pair
 amplify init # example of options to select in screenshot below
-yarn run start
+npm start
 ```
 
 ![Amplify Init Options](amplify-init-options.png "Amplify Init Options")
