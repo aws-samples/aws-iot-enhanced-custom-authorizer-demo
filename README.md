@@ -1,6 +1,6 @@
 # AWS IoT Enhanced Custom Authorizer Demo
 
-This example demonstrates the necessary steps to use Enhanced Custom Authentication and Configurable Endpoints with AWS IoT Core. At the time of writing, these features are available as public Beta only in the us-east-1 / N. Virginia region of AWS.
+This example demonstrates the necessary steps to use Enhanced Custom Authentication and Configurable Endpoints with AWS IoT Core. 
 
 One major disclaimer at this time: This demo was built taking the path of least resistance; a production quality implementation is pending using a more suitable approach to token validation in the Custom Authorizer AWS Lambda function, and using token signing.
 
